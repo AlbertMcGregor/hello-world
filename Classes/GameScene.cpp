@@ -23,48 +23,29 @@ bool GameScene::init()
         return false;
     }
 
-	auto visibleSize = Director::getInstance()->getVisibleSize();
+	visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto background1 = Sprite::create("background-day.png");
-	background1->setAnchorPoint(Vec2(0, 1));
-	background1->setPosition(Vec2(0, getContentSize().height));
+	auto Background = Sprite::create("Background.png");
+	Background->setAnchorPoint(Vec2(0, 1));
+	Background->setPosition(Vec2(0, Director::getInstance()->getVisibleSize().height));
 
-	auto background2 = Sprite::create("background-day.png");
-	background2->setAnchorPoint(Vec2(0, 1));
-	background2->setPosition(Vec2(background1->getContentSize().width, getContentSize().height));
+	Base = Sprite::create("baseLong2.png");
+	Base->setAnchorPoint(Vec2(0, 1));
+	Base->setPosition(0, visibleSize.height - Background->getContentSize().height);
 
-	auto background3 = Sprite::create("background-day.png");
-	background3->setAnchorPoint(Vec2(0, 1));
-	background3->setPosition(Vec2(background1->getContentSize().width * 2, getContentSize().height));
+	auto moveBy = MoveBy::create(PIPE_MOVEMENT_SPEED * visibleSize.width, Point(-visibleSize.width -
+		Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE, 0));
 
-	auto background4 = Sprite::create("background-day.png");
-	background4->setAnchorPoint(Vec2(0, 1));
-	background4->setPosition(Vec2(background1->getContentSize().width * 3, getContentSize().height));
+	auto repeatForever = RepeatForever::create(moveBy);
 
-	auto base1 = Sprite::create("base.png");
-	base1->setScaleY(1.3);
-	base1->setAnchorPoint(Vec2(0, 1));
-	base1->setPosition(Vec2(0, getContentSize().height - background1->getContentSize().height));
+	Base->runAction(repeatForever);
 
-	auto base2 = Sprite::create("base.png");
-	base2->setScaleY(1.3);
-	base2->setAnchorPoint(Vec2(0, 1));
-	base2->setPosition(Vec2(base1->getContentSize().width, getContentSize().height - background1->getContentSize().height));
+	auto PipeSize = Sprite::create("TopPipe.png")->getContentSize();
+	
+	this->addChild(Background, -1);
+	this->addChild(Base, 1);
 
-	auto base3 = Sprite::create("base.png");
-	base3->setScaleY(1.3);
-	base3->setAnchorPoint(Vec2(0, 1));
-	base3->setPosition(Vec2(base1->getContentSize().width * 2, getContentSize().height - background1->getContentSize().height));
-
-	this->addChild(background1, -1);
-	this->addChild(background2, -1);
-	this->addChild(background3, -1);
-	this->addChild(background4, -1);
-	this->addChild(base1, 1);
-	this->addChild(base2, 1);
-	this->addChild(base3, 1);
-
-	Size size(visibleSize.width, background1->getContentSize().height);
+	Size size(visibleSize.width, Background->getContentSize().height);
 
 	auto edgeBody = PhysicsBody::createEdgeBox(size);
 	edgeBody->setCollisionBitmask(OBSTACLE_COLLISION_BITMASK);
@@ -73,7 +54,7 @@ bool GameScene::init()
 	auto edgeNode = Node::create();
 
 	edgeNode->setPosition(Vec2(visibleSize.width / 2,
-		                       visibleSize.height / 2  + (visibleSize.height - background1->getContentSize().height) / 2));
+		                       visibleSize.height / 2  + (visibleSize.height - Background->getContentSize().height) / 2));
 	edgeNode->setPhysicsBody(edgeBody);
 
 	this->addChild(edgeNode);
@@ -129,6 +110,15 @@ void GameScene::StopFlying(float dt)
 void GameScene::update(float dt)
 {
 	bird->Fall();
+
+	auto position = Base->getPosition();
+
+	if (position.x < (0 - (Base->getContentSize().width - visibleSize.width - 50)))
+	{
+		position.x = 0;
+	}
+
+	Base->setPosition(position);
 }
 
 

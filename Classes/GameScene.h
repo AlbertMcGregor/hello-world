@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Pipe.h"
 #include "Bird.h"
+#include "Base.h"
 
 class GameScene : public cocos2d::Layer
 {
@@ -28,6 +29,10 @@ private:
 	cocos2d::PhysicsWorld *sceneWorld;
 
 	void SpawnPipe(float dt);
+
+	cocos2d::Size visibleSize;
+
+	cocos2d::Sprite *Base;
 
 	Pipe pipe;
 	Bird *bird;
