@@ -25,6 +25,8 @@ private:
 	void StopFlying(float dt);
 
 	void update(float dt);
+	
+	void baseMoving();
 
 	cocos2d::PhysicsWorld *sceneWorld;
 

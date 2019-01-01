@@ -8,7 +8,7 @@ class Base
 public:
 	Base();
 
-	void SpawnBase(cocos2d::Layer *layer);
+	void Spawnase(cocos2d::Layer *layer);
 
 private:
 	cocos2d::Size visibleSize;

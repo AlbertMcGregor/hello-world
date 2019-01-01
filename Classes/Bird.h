@@ -11,6 +11,10 @@ public:
 	void Fall();
 	void Fly() { isFalling = false; };
 	void StopFlying() { isFalling = true; };
+	void BirdAnimate();
+	void BirdRotate();
+	void BirdFalling();
+	void Pause();
 
 private:
 	cocos2d::Size visibleSize;
@@ -19,7 +23,6 @@ private:
 	cocos2d::Sprite *happyBird;
 
 	bool isFalling;
-
 
 };
 

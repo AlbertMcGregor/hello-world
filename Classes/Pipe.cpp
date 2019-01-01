@@ -63,6 +63,12 @@ void Pipe::SpawnPipe(cocos2d::Layer *layer)
 
 }
 
+void Pipe::PausePipes()
+{
+	topPipe->pauseSchedulerAndActions();
+	bottomPipe->pauseSchedulerAndActions();
+}
+
 
 
 

@@ -85,6 +85,7 @@ bool GameScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 {
 	bird->Fly();
 	this->scheduleOnce(schedule_selector(GameScene::StopFlying), BIRD_FLY_DURATION);
+	bird->BirdAnimate();
 
 	return true;
 }
@@ -97,6 +98,8 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
 	if (BIRD_COLLISION_BITMASK == a->getCollisionBitmask() && OBSTACLE_COLLISION_BITMASK == b->getCollisionBitmask() ||
 		BIRD_COLLISION_BITMASK == b->getCollisionBitmask() && OBSTACLE_COLLISION_BITMASK == a->getCollisionBitmask())
 	{
+		Director::getInstance()->pause();
+
 		auto scene = GameOverScene::createScene();
 	}
 	return true;
@@ -110,7 +113,12 @@ void GameScene::StopFlying(float dt)
 void GameScene::update(float dt)
 {
 	bird->Fall();
+	bird->BirdRotate();
+	baseMoving();
+}
 
+void GameScene::baseMoving()
+{
 	auto position = Base->getPosition();
 
 	if (position.x < (0 - (Base->getContentSize().width - visibleSize.width - 50)))

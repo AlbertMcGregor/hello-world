@@ -28,7 +28,7 @@ bool MainMenuScene::init()
 	playItem->setScale(0.35);
 	
 	auto menu = Menu::createWithItem(playItem);
-	menu->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 4,
+	menu->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 4 * 3,
 		                       Director::getInstance()->getVisibleSize().height / 4 * 1.2));
 
 
