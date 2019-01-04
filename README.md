@@ -5,4 +5,4 @@ Hi Humans!
 
 I learning github and Cocos2d-x
 
-BASED ON COCOS2D-X-3.16 VERSION
+GAME BASED ON COCOS2D-X 3.16 VERSION
