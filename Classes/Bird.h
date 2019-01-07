@@ -2,6 +2,7 @@
 #define __BIRD_H__
 
 #include "cocos2d.h"
+#include "SimpleAudioEngine.h"
 
 class Bird
 {
@@ -13,8 +14,8 @@ public:
 	void StopFlying() { isFalling = true; };
 	void BirdAnimate();
 	void BirdRotate();
-	void BirdFalling();
 	void Pause();
+	void checkPosition();
 
 private:
 	cocos2d::Size visibleSize;

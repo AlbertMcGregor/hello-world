@@ -28,6 +28,12 @@ private:
 	
 	void baseMoving();
 
+	void flapEffect();
+
+	void pointEffect();
+
+	void hitEffect();
+
 	cocos2d::PhysicsWorld *sceneWorld;
 
 	void SpawnPipe(float dt);
@@ -38,6 +44,9 @@ private:
 
 	Pipe pipe;
 	Bird *bird;
+
+	unsigned int score;
+	cocos2d::Label *scoreLabel;
 
 };
 

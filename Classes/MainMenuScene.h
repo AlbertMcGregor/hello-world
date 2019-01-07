@@ -15,8 +15,9 @@ public:
 
 private:
 	cocos2d::Sprite *base1;
+	cocos2d::Sprite *bird;
 	void GoToGameScene(Ref *sender);
-
+	void BirdAnimate();
 };
 
 #endif // __MAIN_MENU_SCENE_H__
