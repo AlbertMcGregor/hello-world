@@ -20,38 +20,37 @@ bool MainMenuScene::init()
         return false;
     }
 
-	auto visibleSize = Director::getInstance()->getVisibleSize();
+	visibleSize = Director::getInstance()->getVisibleSize();
 
 	auto Background = Sprite::create("Background.png");
 	Background->setAnchorPoint(Vec2(0, 1));
 	Background->setPosition(Vec2(0, Director::getInstance()->getVisibleSize().height));
-
-	auto Base = Sprite::create("baseLong2.png");
-	Base->setAnchorPoint(Vec2(0, 1));
-	Base->setPosition(0, visibleSize.height - Background->getContentSize().height);
-
-	auto moveBy = MoveBy::create(PIPE_MOVEMENT_SPEED * visibleSize.width, Point(-visibleSize.width -
-		Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE, 0));
-
-	auto repeatForever = RepeatForever::create(moveBy);
-
-	Base->runAction(repeatForever);
+	
+	base = Sprite::create("baseLong2.png");
+	base->setAnchorPoint(Vec2(0, 1));
+	base->setPosition(0, visibleSize.height - Background->getContentSize().height);
 
 	this->addChild(Background, -1);
-	this->addChild(Base, 1);
+	this->addChild(base, 1);
+
+	moveBy = MoveBy::create(PIPE_MOVEMENT_SPEED * visibleSize.width, Vec2(-visibleSize.width -
+		Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE, 0));
+
+	base->runAction(moveBy);
+
 
 	auto playItem = MenuItemImage::create("start-button.png", "start-button.png", CC_CALLBACK_1(MainMenuScene::GoToGameScene, this));
 	playItem->setScale(1.5);
 	auto menu = Menu::createWithItem(playItem);
 	menu->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2,
 		                       Director::getInstance()->getVisibleSize().height / 2.8));
-
 	this->addChild(menu);
 
 	auto menuLabel = Label::createWithTTF("HappyBird", "flappy-bird.ttf", 200);
 	menuLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.85));
 	menuLabel->setTextColor(cocos2d::Color4B::WHITE);
-	menuLabel->enableOutline(cocos2d::Color4B::BLACK, 4);
+	menuLabel->enableOutline(cocos2d::Color4B(0, 0, 0, 200));
+	menuLabel->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -8));
 	this->addChild(menuLabel);
 
 	bird = Sprite::create("yellowbird-midflap.png");
@@ -68,7 +67,26 @@ bool MainMenuScene::init()
 
 	bird->runAction(RepeatForever::create(sequence));
 
+	this->scheduleUpdate();
+
     return true;
+}
+
+void MainMenuScene::update(float dt)
+{
+	
+	Vec2 position = base->getPosition();
+	if (position.x < (-(visibleSize.width) - Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE + 10))
+	{
+		position.x = 0;
+		base->setPosition(position);
+
+		auto moveBy = MoveBy::create(PIPE_MOVEMENT_SPEED * (visibleSize.width), Vec2(-visibleSize.width -
+			Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE, 0));
+
+		base->runAction(moveBy);
+	}
+
 }
 
 void MainMenuScene::GoToGameScene(Ref *sender)
@@ -90,6 +108,7 @@ void MainMenuScene::BirdAnimate()
 
 	bird->runAction(RepeatForever::create(animate));
 }
+
 
 
 

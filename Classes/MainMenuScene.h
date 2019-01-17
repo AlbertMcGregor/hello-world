@@ -10,14 +10,26 @@ public:
 
     virtual bool init() override;
 
-        
+	void update(float) override;
+		
     CREATE_FUNC(MainMenuScene);
 
 private:
-	cocos2d::Sprite *base1;
+	cocos2d::Sprite *base;
+
+	cocos2d::MoveBy *moveBy;
+
+	cocos2d::Size visibleSize;
+
 	cocos2d::Sprite *bird;
+
 	void GoToGameScene(Ref *sender);
+
 	void BirdAnimate();
+
+	float durationTemp;
+	float pipeScaleTemp;
+	float topPipeWidth;
 };
 
 #endif // __MAIN_MENU_SCENE_H__

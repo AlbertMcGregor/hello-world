@@ -14,6 +14,7 @@ public:
 
 private:
 	void GoToMainMenuScene(float dt);
+	int replaceTime;
 };
 
 #endif // __SPLASH_SCENE_H__

@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 #include "Pipe.h"
 #include "Bird.h"
-#include "Base.h"
+
 
 class GameScene : public cocos2d::Layer
 {
@@ -16,37 +16,43 @@ public:
     CREATE_FUNC(GameScene);
 
 private:
+
+	unsigned int score;
+
 	void setPhysicsWorld(cocos2d::PhysicsWorld *world) { sceneWorld = world; };
-
-	bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
-
-	bool onContactBegin(cocos2d::PhysicsContact &contact);
+	
+	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
 
 	void StopFlying(float dt);
 
 	void update(float dt);
-	
-	void baseMoving();
 
+	void BaseMovingController();
+	
 	void flapEffect();
 
 	void pointEffect();
 
 	void hitEffect();
-
-	cocos2d::PhysicsWorld *sceneWorld;
-
+	
 	void SpawnPipe(float dt);
+
+	bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
+	
+	bool onContactBegin(cocos2d::PhysicsContact &contact);
+
+	Pipe pipe;
+	Bird *bird;
+	
+	cocos2d::PhysicsWorld *sceneWorld;
 
 	cocos2d::Size visibleSize;
 
 	cocos2d::Sprite *Base;
+	cocos2d::Sprite *getReady;
 
-	Pipe pipe;
-	Bird *bird;
-
-	unsigned int score;
 	cocos2d::Label *scoreLabel;
+	cocos2d::Label *instructionLabel;
 
 };
 

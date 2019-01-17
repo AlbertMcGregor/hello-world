@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
-#include "SplashScene.h"
+#include "Param.h"
+#include "MainMenuScene.h"
 
 USING_NS_CC;
 
@@ -21,7 +22,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
-    auto scene = SplashScene::createScene();
+    auto scene = MainMenuScene::createScene();
 
     director->runWithScene(scene);
 
