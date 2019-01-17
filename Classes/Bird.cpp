@@ -13,29 +13,6 @@ Bird::Bird(cocos2d::Layer *layer)
 	happyBird = Sprite::create("bluebird-midflap.png");
 	happyBird->setPosition(Point(visibleSize.width / 3 , visibleSize.height / 2 + origin.y));
 
-	
-	/* Код оптимизации PhysicsBody требует доработки: за одно прохождение птицы через разрыв трубы засчитывается до 18-20 очков вместо 1.
-	PhysicsBody получен с помощью редактора physics-body-editor-2.9.2 и класса MyBodyParser.
-
-	if (MyBodyParser::getInstance()->parseJsonFile("birdBody.json"))
-	{
-		happyBody = MyBodyParser::getInstance()->bodyFormJson(happyBird, "birdBody", PhysicsMaterial(1.0f, 0.0f, 1.0f));
-
-		if (happyBody != nullptr)
-		{
-			happyBody->setCollisionBitmask(BIRD_COLLISION_BITMASK);
-			happyBody->setContactTestBitmask(true);
-			happyBird->setPhysicsBody(happyBody);
-		}
-		else
-			CCLOG("Object.cpp happyBody is null pointer");
-	}
-	else
-	{
-		CCLOG("JSON file is not found");
-	};
-	*/
-
 	happyBody = PhysicsBody::createCircle(happyBird->getContentSize().height / 2);
 	happyBody->setCollisionBitmask(BIRD_COLLISION_BITMASK);
 	happyBody->setContactTestBitmask(true);
