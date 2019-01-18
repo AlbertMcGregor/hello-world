@@ -78,12 +78,6 @@ void Pipe::SpawnPipe(cocos2d::Layer *layer)
 	pointNode->runAction(pointAction);
 }
 
-void Pipe::PausePipes()
-{
-	topPipe->pauseSchedulerAndActions();
-	bottomPipe->pauseSchedulerAndActions();
-}
-
 
 
 

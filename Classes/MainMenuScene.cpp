@@ -45,13 +45,19 @@ bool MainMenuScene::init()
 	menu->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2,
 		                       Director::getInstance()->getVisibleSize().height / 2.8));
 	this->addChild(menu);
-
+	
 	auto menuLabel = Label::createWithTTF("HappyBird", "flappy-bird.ttf", 200);
 	menuLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.85));
 	menuLabel->setTextColor(cocos2d::Color4B::WHITE);
 	menuLabel->enableOutline(cocos2d::Color4B(0, 0, 0, 200));
 	menuLabel->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -8));
 	this->addChild(menuLabel);
+
+	auto autorLabel = Label::createWithTTF("Powered by Albert Protopopov", "flappy-bird.ttf", 50);
+	autorLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.12));
+	autorLabel->setTextColor(cocos2d::Color4B::WHITE);
+	autorLabel->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -2));
+	this->addChild(autorLabel, 5);
 
 	bird = Sprite::create("yellowbird-midflap.png");
 	bird->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));

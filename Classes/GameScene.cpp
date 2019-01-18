@@ -2,6 +2,7 @@
 #include "GameOverScene.h"
 #include "Param.h"
 #include "SimpleAudioEngine.h"
+#include "Bird.h"
 
 USING_NS_CC;
 
@@ -60,13 +61,16 @@ bool GameScene::init()
 	//////////////////////////////////////    INSTRUCTIONS    ////////////////////////////////////////////////
 
 
-	getReady = Sprite::create("get-ready.png");
+	getReady = Label::createWithTTF("Get Ready!", "flappy-bird.ttf", visibleSize.height * 0.1);
+	getReady->setTextColor(Color4B(50, 205, 20, 255));
+	getReady->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -4));
+	getReady->enableOutline(cocos2d::Color4B::WHITE, 2);
 	getReady->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.7));
 	this->addChild(getReady, 1);
 
 	instructionLabel = Label::createWithTTF("click the left mouse button,\nan upper arrow or a space\nto fly", "flappy-bird.ttf", 50);
 	instructionLabel->setPosition(Vec2(visibleSize.width * 0.7, visibleSize.height * 0.5));
-	instructionLabel->setTextColor(Color4B(0, 205, 0, 255));
+	instructionLabel->setTextColor(Color4B(50, 205, 20, 255));
 	instructionLabel->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -4));
 	instructionLabel->enableOutline(cocos2d::Color4B::WHITE, 2);
 	this->addChild(instructionLabel);
@@ -132,7 +136,6 @@ bool GameScene::init()
 	__String *tempScore = __String::createWithFormat("%i", score);
 	scoreLabel = Label::createWithTTF(tempScore->getCString(), "flappy-bird.ttf", visibleSize.height * 0.2);
 	scoreLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.8));
-	scoreLabel->enableOutline(cocos2d::Color4B(0, 0, 0, 200), 2);
 	scoreLabel->setColor(Color3B::WHITE);
 
 	this->addChild(scoreLabel, 200);
@@ -213,7 +216,6 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
 		auto scene = GameOverScene::createScene(score);
 
 		Director::getInstance()->replaceScene(scene);
-
 	}
 
 	if (BIRD_COLLISION_BITMASK == a->getCollisionBitmask() && POINT_COLLISION_BITMASK == b->getCollisionBitmask() ||

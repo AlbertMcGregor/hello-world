@@ -13,9 +13,7 @@ public:
 	void StopFlying() { isFalling = true; };
 	void BirdAnimate();
 	void BirdRotate();
-	void Pause();
 	void checkPosition();
-	void BlockCollision();
 
 private:
 	cocos2d::Size visibleSize;

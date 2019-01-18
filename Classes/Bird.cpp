@@ -78,14 +78,6 @@ void Bird::BirdRotate() {
 	}
 }
 
-
-
-
-void Bird::Pause()
-{
-	happyBird->pause();
-}
-
 void Bird::checkPosition()
 {
 	auto y = happyBird->getPositionY();

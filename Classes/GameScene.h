@@ -11,6 +11,8 @@ class GameScene : public cocos2d::Layer
 public:
     static cocos2d::Scene* createScene();
 
+	void PauseBirdG();
+
     bool init();
 
     CREATE_FUNC(GameScene);
@@ -49,7 +51,7 @@ private:
 	cocos2d::Size visibleSize;
 
 	cocos2d::Sprite *Base;
-	cocos2d::Sprite *getReady;
+	cocos2d::Label *getReady;
 
 	cocos2d::Label *scoreLabel;
 	cocos2d::Label *instructionLabel;

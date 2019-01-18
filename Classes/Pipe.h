@@ -8,8 +8,6 @@ class Pipe
 public:
 	Pipe();
 
-	void PausePipes();
-
 	void SpawnPipe(cocos2d::Layer *layer);
 
 private:
