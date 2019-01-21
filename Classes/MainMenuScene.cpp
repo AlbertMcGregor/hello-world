@@ -1,6 +1,5 @@
 #include "MainMenuScene.h"
 #include "GameScene.h"
-#include "Param.h"
 
 USING_NS_CC;
 
@@ -33,8 +32,8 @@ bool MainMenuScene::init()
 	this->addChild(Background, -1);
 	this->addChild(base, 1);
 
-	moveBy = MoveBy::create(PIPE_MOVEMENT_SPEED * visibleSize.width, Vec2(-visibleSize.width -
-		Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE, 0));
+	moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * visibleSize.width, Vec2(-visibleSize.width -
+		Sprite::create("TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
 
 	base->runAction(moveBy);
 
@@ -73,6 +72,10 @@ bool MainMenuScene::init()
 
 	bird->runAction(RepeatForever::create(sequence));
 
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyPressed = CC_CALLBACK_2(MainMenuScene::OnKeyPressed, this);
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+
 	this->scheduleUpdate();
 
     return true;
@@ -82,13 +85,14 @@ void MainMenuScene::update(float dt)
 {
 	
 	Vec2 position = base->getPosition();
-	if (position.x < (-(visibleSize.width) - Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE + 10))
+	if (position.x < (-(visibleSize.width) - Sprite::create("TopPipe.png")->getContentSize().width *
+		settings.jsonsettings["PIPE_SCALE"].GetFloat() + 10))
 	{
 		position.x = 0;
 		base->setPosition(position);
 
-		auto moveBy = MoveBy::create(PIPE_MOVEMENT_SPEED * (visibleSize.width), Vec2(-visibleSize.width -
-			Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE, 0));
+		auto moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * (visibleSize.width), Vec2(-visibleSize.width -
+			Sprite::create("TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
 
 		base->runAction(moveBy);
 	}
@@ -114,6 +118,18 @@ void MainMenuScene::BirdAnimate()
 
 	bird->runAction(RepeatForever::create(animate));
 }
+
+void MainMenuScene::OnKeyPressed(EventKeyboard::KeyCode keyCode, Event *event)
+{
+	switch (keyCode)
+		case EventKeyboard::KeyCode::KEY_ENTER:
+	{
+		auto scene = GameScene::createScene();
+		Director::getInstance()->replaceScene(scene);
+	}
+}
+
+
 
 
 

@@ -2,8 +2,9 @@
 #define __GAME_SCENE_H__
 
 #include "cocos2d.h"
-#include "Pipe.h"
+#include "PipeManager.h"
 #include "Bird.h"
+#include "Settings.h"
 
 
 class GameScene : public cocos2d::Layer
@@ -43,8 +44,9 @@ private:
 	
 	bool onContactBegin(cocos2d::PhysicsContact &contact);
 
-	Pipe pipe;
+	PipeManager pipeManager;
 	Bird *bird;
+	Settings settings;
 	
 	cocos2d::PhysicsWorld *sceneWorld;
 

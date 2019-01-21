@@ -2,6 +2,8 @@
 #define __MAIN_MENU_SCENE_H__
 
 #include "cocos2d.h"
+#include "Settings.h"
+#include <string>
 
 class MainMenuScene : public cocos2d::Layer
 {
@@ -25,11 +27,13 @@ private:
 
 	void GoToGameScene(Ref *sender);
 
+	void OnKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
+
 	void BirdAnimate();
 
-	float durationTemp;
-	float pipeScaleTemp;
 	float topPipeWidth;
+
+	Settings settings;
 };
 
 #endif // __MAIN_MENU_SCENE_H__

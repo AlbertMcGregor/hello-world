@@ -2,6 +2,7 @@
 #define __BIRD_H__
 
 #include "cocos2d.h"
+#include "Settings.h"
 
 class Bird
 {
@@ -25,6 +26,7 @@ private:
 
 	bool isFalling;
 
+	Settings settings;
 };
 
 #endif // __BIRD_H__

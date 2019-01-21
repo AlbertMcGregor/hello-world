@@ -1,6 +1,4 @@
 #include "Bird.h"
-#include "Param.h"
-#include "MyBodyParser.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -14,7 +12,7 @@ Bird::Bird(cocos2d::Layer *layer)
 	happyBird->setPosition(Point(visibleSize.width / 3 , visibleSize.height / 2 + origin.y));
 
 	happyBody = PhysicsBody::createCircle(happyBird->getContentSize().height / 2);
-	happyBody->setCollisionBitmask(BIRD_COLLISION_BITMASK);
+	happyBody->setCollisionBitmask(settings.jsonsettings["BIRD_COLLISION_BITMASK"].GetFloat());
 	happyBody->setContactTestBitmask(true);
 
 	happyBird->setPhysicsBody(happyBody);
@@ -31,12 +29,12 @@ void Bird::Fall()
 	if (true == isFalling)
 	{
 		happyBird->setPositionX(visibleSize.width / 3 + origin.x);
-		happyBird->setPositionY(happyBird->getPositionY() - (BIRD_FALLING_SPEED * visibleSize.height));
+		happyBird->setPositionY(happyBird->getPositionY() - (settings.jsonsettings["BIRD_FALLING_SPEED"].GetFloat() * visibleSize.height));
 	}
 	else
 	{
 		happyBird->setPositionX(visibleSize.width / 3 + origin.x);
-		happyBird->setPositionY(happyBird->getPositionY() + (BIRD_FLYING_SPEED * visibleSize.height));
+		happyBird->setPositionY(happyBird->getPositionY() + (settings.jsonsettings["BIRD_FLYING_SPEED"].GetFloat() * visibleSize.height));
 	}
 }
 

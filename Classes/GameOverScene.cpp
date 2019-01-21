@@ -1,13 +1,12 @@
 #include "GameOverScene.h"
 #include "GameScene.h"
-#include "ui\CocosGUI.h"
-#include <string>
+#include "Settings.h"
 
 USING_NS_CC;
 
 using namespace std;
 
-unsigned int score;
+int score;
 
 Scene* GameOverScene::createScene(unsigned int tempScore)
 {
@@ -27,15 +26,23 @@ bool GameOverScene::init()
         return false;
     }
 
+	Settings settings;
+
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
 	UserDefault *def = UserDefault::getInstance();
 	auto highScore = def->getIntegerForKey("HIGHSCORE", 0);
+
+	// Вариант с хранением highscore пока не работает корректно: не удалётся перезаписать "HIGHSCORE" в json файле
+	//int highScore = settings.jsonsettings["HIGHSCORE"].GetInt();
 	
 	if (score > highScore)
 	{
 		def->setIntegerForKey("HIGHSCORE", score);
+		//settings.jsonsettings["HIGHSCORE"].SetInt(score);
 		highScore = def->getIntegerForKey("HIGHSCORE", 0);
+		//highScore = settings.jsonsettings["HIGHSCORE"].GetInt();
+		//settings.jsonsettings.SetInt(score);
 	}
 
 	def->flush();
@@ -77,6 +84,10 @@ bool GameOverScene::init()
 	gameOverText->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.9));
 	this->addChild(gameOverText);
 
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyPressed = CC_CALLBACK_2(GameOverScene::OnKeyPressed, this);
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+
 	return true;
 }
 
@@ -86,12 +97,15 @@ void GameOverScene::GoToGameScene(Ref *sender)
 	Director::getInstance()->replaceScene(scene);
 }
 
-void GameOverScene::ResetHighscore(Ref *sender)
+void GameOverScene::OnKeyPressed(EventKeyboard::KeyCode keyCode, Event *event)
 {
-
+	switch (keyCode)
+		case EventKeyboard::KeyCode::KEY_ENTER:
+	{
+		auto scene = GameScene::createScene();
+		Director::getInstance()->replaceScene(scene);
+	}
 }
-
-
 
 
 

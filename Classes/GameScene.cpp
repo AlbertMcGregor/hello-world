@@ -1,6 +1,5 @@
 #include "GameScene.h"
 #include "GameOverScene.h"
-#include "Param.h"
 #include "SimpleAudioEngine.h"
 #include "Bird.h"
 
@@ -49,8 +48,8 @@ bool GameScene::init()
 	Base->setAnchorPoint(Vec2(0, 1));
 	Base->setPosition(0, visibleSize.height - Background->getContentSize().height);
 
-	auto moveBy = MoveBy::create(PIPE_MOVEMENT_SPEED * visibleSize.width, Vec2(-visibleSize.width -
-		Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE, 0));
+	auto moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * visibleSize.width, Vec2(-visibleSize.width -
+		Sprite::create("TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
 
 	Base->runAction(moveBy);
 
@@ -68,12 +67,13 @@ bool GameScene::init()
 	getReady->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.7));
 	this->addChild(getReady, 1);
 
-	instructionLabel = Label::createWithTTF("click the left mouse button,\nan upper arrow or a space\nto fly", "flappy-bird.ttf", 50);
+	instructionLabel = Label::createWithTTF("click the left mouse button,\nupper arrow, enter, or space\nto fly",
+		"flappy-bird.ttf", 50);
 	instructionLabel->setPosition(Vec2(visibleSize.width * 0.7, visibleSize.height * 0.5));
 	instructionLabel->setTextColor(Color4B(50, 205, 20, 255));
 	instructionLabel->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -4));
 	instructionLabel->enableOutline(cocos2d::Color4B::WHITE, 2);
-	this->addChild(instructionLabel);
+	this->addChild(instructionLabel, 1);
 
 
 
@@ -94,7 +94,7 @@ bool GameScene::init()
 	Size sizeBase(visibleSize.width, visibleSize.height - Background->getContentSize().height);
 
 	auto edgeBodyBase = PhysicsBody::createEdgeBox(sizeBase);
-	edgeBodyBase->setCollisionBitmask(OBSTACLE_COLLISION_BITMASK);
+	edgeBodyBase->setCollisionBitmask(settings.jsonsettings["OBSTACLE_COLLISION_BITMASK"].GetFloat());
 	edgeBodyBase->setContactTestBitmask(true);
 
 	auto edgeNodeBase = Node::create();
@@ -105,7 +105,7 @@ bool GameScene::init()
 	this->addChild(edgeNode);
 	this->addChild(edgeNodeBase);
 
-	this->schedule(schedule_selector(GameScene::SpawnPipe), PIPE_SPAWN_FREQUENCY * visibleSize.width);
+	this->schedule(schedule_selector(GameScene::SpawnPipe), settings.jsonsettings["PIPE_SPAWN_FREQUENCY"].GetFloat() * visibleSize.width);
 
 	bird = new Bird(this);
 
@@ -151,7 +151,7 @@ bool GameScene::init()
 
 void GameScene::SpawnPipe(float dt)
 {
-	pipe.SpawnPipe(this);
+	pipeManager.SpawnPipe(this);
 }
 
 
@@ -168,7 +168,7 @@ bool GameScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 
 	flapEffect();
 
-	this->scheduleOnce(schedule_selector(GameScene::StopFlying), BIRD_FLY_DURATION);
+	this->scheduleOnce(schedule_selector(GameScene::StopFlying), settings.jsonsettings["BIRD_FLY_DURATION"].GetFloat());
 
 	bird->BirdAnimate();
 
@@ -181,6 +181,7 @@ void GameScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode,cocos2d::Ev
 	{
 	case EventKeyboard::KeyCode::KEY_SPACE:
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+	case EventKeyboard::KeyCode::KEY_ENTER:
 	  {
 		if (Director::getInstance()->isPaused())
 		{
@@ -193,7 +194,7 @@ void GameScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode,cocos2d::Ev
 
 		flapEffect();
 
-		this->scheduleOnce(schedule_selector(GameScene::StopFlying), BIRD_FLY_DURATION);
+		this->scheduleOnce(schedule_selector(GameScene::StopFlying), settings.jsonsettings["BIRD_FLY_DURATION"].GetFloat());
 
 		bird->BirdAnimate();
 	  }
@@ -207,8 +208,10 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
 	PhysicsBody *a = contact.getShapeA()->getBody();
 	PhysicsBody *b = contact.getShapeB()->getBody();
 
-	if (BIRD_COLLISION_BITMASK == a->getCollisionBitmask() && OBSTACLE_COLLISION_BITMASK == b->getCollisionBitmask() ||
-		BIRD_COLLISION_BITMASK == b->getCollisionBitmask() && OBSTACLE_COLLISION_BITMASK == a->getCollisionBitmask())
+	if (settings.jsonsettings["BIRD_COLLISION_BITMASK"] == a->getCollisionBitmask() && 
+		settings.jsonsettings["OBSTACLE_COLLISION_BITMASK"] == b->getCollisionBitmask() ||
+		settings.jsonsettings["BIRD_COLLISION_BITMASK"] == b->getCollisionBitmask() && 
+		settings.jsonsettings["OBSTACLE_COLLISION_BITMASK"] == a->getCollisionBitmask())
 	{
 
 		hitEffect();
@@ -218,8 +221,10 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
 		Director::getInstance()->replaceScene(scene);
 	}
 
-	if (BIRD_COLLISION_BITMASK == a->getCollisionBitmask() && POINT_COLLISION_BITMASK == b->getCollisionBitmask() ||
-		BIRD_COLLISION_BITMASK == b->getCollisionBitmask() && POINT_COLLISION_BITMASK == a->getCollisionBitmask())
+	if (settings.jsonsettings["BIRD_COLLISION_BITMASK"] == a->getCollisionBitmask() && 
+		settings.jsonsettings["POINT_COLLISION_BITMASK"] == b->getCollisionBitmask() ||
+		settings.jsonsettings["BIRD_COLLISION_BITMASK"] == b->getCollisionBitmask() && 
+		settings.jsonsettings["POINT_COLLISION_BITMASK"] == a->getCollisionBitmask())
 	{
 		
 		pointEffect();
@@ -273,13 +278,14 @@ void GameScene::hitEffect()
 void GameScene::BaseMovingController()
 {
 	Vec2 position = Base->getPosition();
-	if (position.x < (-(visibleSize.width) - Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE + 10))
+	if (position.x < (-(visibleSize.width) - Sprite::create("TopPipe.png")->getContentSize().width * 
+		settings.jsonsettings["PIPE_SCALE"].GetFloat() + 10))
 	{
 		position.x = 0;
 		Base->setPosition(position);
 
-		auto moveBy = MoveBy::create(PIPE_MOVEMENT_SPEED * (visibleSize.width), Vec2(-visibleSize.width -
-			Sprite::create("TopPipe.png")->getContentSize().width * PIPE_SCALE, 0));
+		auto moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * (visibleSize.width), Vec2(-visibleSize.width -
+			Sprite::create("TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
 
 		Base->runAction(moveBy);
 	}
