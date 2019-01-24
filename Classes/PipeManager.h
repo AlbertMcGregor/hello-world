@@ -9,13 +9,13 @@ class PipeManager
 public:
 	PipeManager();
 
-	void SpawnPipe(cocos2d::Layer *layer);
+	void spawnPipe(cocos2d::Layer *layer);
 
 private:
 	cocos2d::Size visibleSize;
 	cocos2d::Vec2 origin;
-	cocos2d::Sprite* topPipe;
-	cocos2d::Sprite* bottomPipe;
+	cocos2d::Sprite* TopPipe;
+	cocos2d::Sprite* BottomPipe;
 
 	Settings settings;
 

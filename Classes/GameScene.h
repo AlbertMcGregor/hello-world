@@ -26,11 +26,11 @@ private:
 	
 	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
 
-	void StopFlying(float dt);
+	void stopFlying(float dt);
 
 	void update(float dt);
 
-	void BaseMovingController();
+	void baseMovingController();
 	
 	void flapEffect();
 
@@ -38,14 +38,16 @@ private:
 
 	void hitEffect();
 	
-	void SpawnPipe(float dt);
+	void spawnPipe(float dt);
 
 	bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
 	
 	bool onContactBegin(cocos2d::PhysicsContact &contact);
 
 	PipeManager pipeManager;
+
 	Bird *bird;
+
 	Settings settings;
 	
 	cocos2d::PhysicsWorld *sceneWorld;
@@ -53,10 +55,10 @@ private:
 	cocos2d::Size visibleSize;
 
 	cocos2d::Sprite *Base;
-	cocos2d::Label *getReady;
+	cocos2d::Label *GetReady;
 
-	cocos2d::Label *scoreLabel;
-	cocos2d::Label *instructionLabel;
+	cocos2d::Label *ScoreLabel;
+	cocos2d::Label *InstructionLabel;
 
 };
 

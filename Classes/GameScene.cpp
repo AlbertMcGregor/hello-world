@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "GameOverScene.h"
 #include "SimpleAudioEngine.h"
+#include "Settings.h"
 #include "Bird.h"
 
 USING_NS_CC;
@@ -31,8 +32,8 @@ bool GameScene::init()
 
 
 	auto effect = CocosDenshion::SimpleAudioEngine::getInstance();
-	effect->preloadEffect("sfx_swooshing.wav");
-	effect->playEffect("sfx_swooshing.wav");
+	effect->preloadEffect("audio/sfx_swooshing.wav");
+	effect->playEffect("audio/sfx_swooshing.wav");
 
 
 	//////////////////////////////////    BACKGROUND & BASE    /////////////////////////////////////////////
@@ -40,16 +41,16 @@ bool GameScene::init()
 
 	visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto Background = Sprite::create("Background.png");
+	auto Background = Sprite::create("images/Background.png");
 	Background->setAnchorPoint(Vec2(0, 1));
 	Background->setPosition(Vec2(0, Director::getInstance()->getVisibleSize().height));
 
-	Base = Sprite::create("baseLong2.png");
+	Base = Sprite::create("images/baseLong2.png");
 	Base->setAnchorPoint(Vec2(0, 1));
 	Base->setPosition(0, visibleSize.height - Background->getContentSize().height);
 
 	auto moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * visibleSize.width, Vec2(-visibleSize.width -
-		Sprite::create("TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+		Sprite::create("images/TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
 
 	Base->runAction(moveBy);
 
@@ -60,20 +61,20 @@ bool GameScene::init()
 	//////////////////////////////////////    INSTRUCTIONS    ////////////////////////////////////////////////
 
 
-	getReady = Label::createWithTTF("Get Ready!", "flappy-bird.ttf", visibleSize.height * 0.1);
-	getReady->setTextColor(Color4B(50, 205, 20, 255));
-	getReady->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -4));
-	getReady->enableOutline(cocos2d::Color4B::WHITE, 2);
-	getReady->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.7));
-	this->addChild(getReady, 1);
+	GetReady = Label::createWithTTF("Get Ready!", "fonts/flappy-bird.ttf", visibleSize.height * 0.1);
+	GetReady->setTextColor(Color4B(50, 205, 20, 255));
+	GetReady->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -4));
+	GetReady->enableOutline(cocos2d::Color4B::WHITE, 2);
+	GetReady->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.7));
+	this->addChild(GetReady, 1);
 
-	instructionLabel = Label::createWithTTF("click the left mouse button,\nupper arrow, enter, or space\nto fly",
-		"flappy-bird.ttf", 50);
-	instructionLabel->setPosition(Vec2(visibleSize.width * 0.7, visibleSize.height * 0.5));
-	instructionLabel->setTextColor(Color4B(50, 205, 20, 255));
-	instructionLabel->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -4));
-	instructionLabel->enableOutline(cocos2d::Color4B::WHITE, 2);
-	this->addChild(instructionLabel, 1);
+	InstructionLabel = Label::createWithTTF("click the left mouse button,\nupper arrow, enter, or space\nto fly",
+		"fonts/flappy-bird.ttf", 50);
+	InstructionLabel->setPosition(Vec2(visibleSize.width * 0.7, visibleSize.height * 0.5));
+	InstructionLabel->setTextColor(Color4B(50, 205, 20, 255));
+	InstructionLabel->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -4));
+	InstructionLabel->enableOutline(cocos2d::Color4B::WHITE, 2);
+	this->addChild(InstructionLabel, 1);
 
 
 
@@ -105,7 +106,7 @@ bool GameScene::init()
 	this->addChild(edgeNode);
 	this->addChild(edgeNodeBase);
 
-	this->schedule(schedule_selector(GameScene::SpawnPipe), settings.jsonsettings["PIPE_SPAWN_FREQUENCY"].GetFloat() * visibleSize.width);
+	this->schedule(schedule_selector(GameScene::spawnPipe), settings.jsonsettings["PIPE_SPAWN_FREQUENCY"].GetFloat() * visibleSize.width);
 
 	bird = new Bird(this);
 
@@ -134,11 +135,11 @@ bool GameScene::init()
 	score = 0;
 
 	__String *tempScore = __String::createWithFormat("%i", score);
-	scoreLabel = Label::createWithTTF(tempScore->getCString(), "flappy-bird.ttf", visibleSize.height * 0.2);
-	scoreLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.8));
-	scoreLabel->setColor(Color3B::WHITE);
+	ScoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/flappy-bird.ttf", visibleSize.height * 0.2);
+	ScoreLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.8));
+	ScoreLabel->setColor(Color3B::WHITE);
 
-	this->addChild(scoreLabel, 200);
+	this->addChild(ScoreLabel, 200);
 
 	this->scheduleUpdate();
 
@@ -149,9 +150,9 @@ bool GameScene::init()
 ///////////////////////////////////////////    METHODS IMPLEMENTATIONS    ////////////////////////////////////////////
 
 
-void GameScene::SpawnPipe(float dt)
+void GameScene::spawnPipe(float dt)
 {
-	pipeManager.SpawnPipe(this);
+	pipeManager.spawnPipe(this);
 }
 
 
@@ -160,17 +161,17 @@ bool GameScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 	if (Director::getInstance()->isPaused())
 	{
 		Director::getInstance()->resume();
-		getReady->setVisible(false);
-		instructionLabel->setVisible(false);
+		GetReady->setVisible(false);
+		InstructionLabel->setVisible(false);
 	}
 
-	bird->Fly();
+	bird->fly();
 
 	flapEffect();
 
-	this->scheduleOnce(schedule_selector(GameScene::StopFlying), settings.jsonsettings["BIRD_FLY_DURATION"].GetFloat());
+	this->scheduleOnce(schedule_selector(GameScene::stopFlying), settings.jsonsettings["BIRD_FLY_DURATION"].GetFloat());
 
-	bird->BirdAnimate();
+	bird->birdAnimate();
 
 	return true;
 }
@@ -186,17 +187,17 @@ void GameScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode,cocos2d::Ev
 		if (Director::getInstance()->isPaused())
 		{
 			Director::getInstance()->resume();
-			getReady->setVisible(false);
-			instructionLabel->setVisible(false);
+			GetReady->setVisible(false);
+			InstructionLabel->setVisible(false);
 		}
 
-		bird->Fly();
+		bird->fly();
 
 		flapEffect();
 
-		this->scheduleOnce(schedule_selector(GameScene::StopFlying), settings.jsonsettings["BIRD_FLY_DURATION"].GetFloat());
+		this->scheduleOnce(schedule_selector(GameScene::stopFlying), settings.jsonsettings["BIRD_FLY_DURATION"].GetFloat());
 
-		bird->BirdAnimate();
+		bird->birdAnimate();
 	  }
 	  break;
 	}
@@ -233,59 +234,59 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
 
         
 		__String *tempScore = __String::createWithFormat("%i", score);
-		scoreLabel->setString(tempScore->getCString());
+		ScoreLabel->setString(tempScore->getCString());
 	}
 
 	return true;
 }
 
 
-void GameScene::StopFlying(float dt)
+void GameScene::stopFlying(float dt)
 {
-	bird->StopFlying();
+	bird->stopFlying();
 }
 
 
 void GameScene::update(float dt)
 {
-	bird->Fall();
-	bird->BirdRotate();
+	bird->fall();
+	bird->birdRotate();
 	bird->checkPosition();
-	BaseMovingController();
+	baseMovingController();
 }
 
 void GameScene::flapEffect()
 {
 	auto effect = CocosDenshion::SimpleAudioEngine::getInstance();
-	effect->preloadEffect("sfx_wing.wav");
-	effect->playEffect("sfx_wing.wav");
+	effect->preloadEffect("audio/sfx_wing.wav");
+	effect->playEffect("audio/sfx_wing.wav");
 }
 
 void GameScene::pointEffect()
 {
 	auto effect = CocosDenshion::SimpleAudioEngine::getInstance();
-	effect->preloadEffect("sfx_point.wav");
-	effect->playEffect("sfx_point.wav");
+	effect->preloadEffect("audio/sfx_point.wav");
+	effect->playEffect("audio/sfx_point.wav");
 }
 
 void GameScene::hitEffect()
 {
 	auto effect = CocosDenshion::SimpleAudioEngine::getInstance();
-	effect->preloadEffect("sfx_hit.wav");
-	effect->playEffect("sfx_hit.wav");
+	effect->preloadEffect("audio/sfx_hit.wav");
+	effect->playEffect("audio/sfx_hit.wav");
 }
 
-void GameScene::BaseMovingController()
+void GameScene::baseMovingController()
 {
 	Vec2 position = Base->getPosition();
-	if (position.x < (-(visibleSize.width) - Sprite::create("TopPipe.png")->getContentSize().width * 
+	if (position.x < (-(visibleSize.width) - Sprite::create("images/TopPipe.png")->getContentSize().width * 
 		settings.jsonsettings["PIPE_SCALE"].GetFloat() + 10))
 	{
 		position.x = 0;
 		Base->setPosition(position);
 
 		auto moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * (visibleSize.width), Vec2(-visibleSize.width -
-			Sprite::create("TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+			Sprite::create("images/TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
 
 		Base->runAction(moveBy);
 	}

@@ -8,77 +8,77 @@ Bird::Bird(cocos2d::Layer *layer)
 	origin = Director::getInstance()->getVisibleOrigin();
 	visibleSize = Director::getInstance()->getVisibleSize();
 
-	happyBird = Sprite::create("bluebird-midflap.png");
-	happyBird->setPosition(Point(visibleSize.width / 3 , visibleSize.height / 2 + origin.y));
+	HappyBird = Sprite::create("images/bluebird-midflap.png");
+	HappyBird->setPosition(Point(visibleSize.width / 3 , visibleSize.height / 2 + origin.y));
 
-	happyBody = PhysicsBody::createCircle(happyBird->getContentSize().height / 2);
-	happyBody->setCollisionBitmask(settings.jsonsettings["BIRD_COLLISION_BITMASK"].GetFloat());
-	happyBody->setContactTestBitmask(true);
+	HappyBody = PhysicsBody::createCircle(HappyBird->getContentSize().height / 2);
+	HappyBody->setCollisionBitmask(settings.jsonsettings["BIRD_COLLISION_BITMASK"].GetFloat());
+	HappyBody->setContactTestBitmask(true);
 
-	happyBird->setPhysicsBody(happyBody);
+	HappyBird->setPhysicsBody(HappyBody);
 
-	layer->addChild(happyBird, 100);
+	layer->addChild(HappyBird, 100);
 
-	isFalling = true;
+	IsFalling = true;
 
 }
 
-void Bird::Fall()
+void Bird::fall()
 {
 
-	if (true == isFalling)
+	if (true == IsFalling)
 	{
-		happyBird->setPositionX(visibleSize.width / 3 + origin.x);
-		happyBird->setPositionY(happyBird->getPositionY() - (settings.jsonsettings["BIRD_FALLING_SPEED"].GetFloat() * visibleSize.height));
+		HappyBird->setPositionX(visibleSize.width / 3 + origin.x);
+		HappyBird->setPositionY(HappyBird->getPositionY() - (settings.jsonsettings["BIRD_FALLING_SPEED"].GetFloat() * visibleSize.height));
 	}
 	else
 	{
-		happyBird->setPositionX(visibleSize.width / 3 + origin.x);
-		happyBird->setPositionY(happyBird->getPositionY() + (settings.jsonsettings["BIRD_FLYING_SPEED"].GetFloat() * visibleSize.height));
+		HappyBird->setPositionX(visibleSize.width / 3 + origin.x);
+		HappyBird->setPositionY(HappyBird->getPositionY() + (settings.jsonsettings["BIRD_FLYING_SPEED"].GetFloat() * visibleSize.height));
 	}
 }
 
-	void Bird::BirdAnimate()
+	void Bird::birdAnimate()
 	{
 		Vector <SpriteFrame *> frames;
 		frames.reserve(3);
-		frames.pushBack(SpriteFrame::create("bluebird-upflap.png", Rect(0, 0, 34, 24)));
-		frames.pushBack(SpriteFrame::create("bluebird-downflap.png", Rect(0, 0, 34, 24)));
-		frames.pushBack(SpriteFrame::create("bluebird-midflap.png", Rect(0, 0, 34, 24)));
+		frames.pushBack(SpriteFrame::create("images/bluebird-upflap.png", Rect(0, 0, 34, 24)));
+		frames.pushBack(SpriteFrame::create("images/bluebird-downflap.png", Rect(0, 0, 34, 24)));
+		frames.pushBack(SpriteFrame::create("images/bluebird-midflap.png", Rect(0, 0, 34, 24)));
 
 		auto animation = Animation::createWithSpriteFrames(frames, 0.1f);
 		auto animate = Animate::create(animation);
 
-		happyBird->runAction(Repeat::create(animate, 2));
+		HappyBird->runAction(Repeat::create(animate, 2));
 	}
 
-void Bird::BirdRotate() {
+void Bird::birdRotate() {
 
-	if ((happyBird->getRotation()) < (-45))
+	if ((HappyBird->getRotation()) < (-45))
 	{
-		happyBird->setRotation(-45);
+		HappyBird->setRotation(-45);
 	}
-	if ((happyBird->getRotation()) > (90))
+	if ((HappyBird->getRotation()) > (90))
 	{
-		happyBird->setRotation(90);
+		HappyBird->setRotation(90);
 	}
 
-	if (true == isFalling)
+	if (true == IsFalling)
 	{
 
-		happyBird->setRotation(happyBird->getRotation() + 4);
+		HappyBird->setRotation(HappyBird->getRotation() + 4);
 
 	}
 	else
 
 	{
-		happyBird->setRotation(happyBird->getRotation() - 8);
+		HappyBird->setRotation(HappyBird->getRotation() - 8);
 	}
 }
 
 void Bird::checkPosition()
 {
-	auto y = happyBird->getPositionY();
+	auto y = HappyBird->getPositionY();
 	if (y > visibleSize.height)
-		happyBird->setPositionY(visibleSize.height - 10);
+		HappyBird->setPositionY(visibleSize.height - 10);
 }

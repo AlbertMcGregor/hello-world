@@ -14,7 +14,7 @@ public:
 
     CREATE_FUNC(GameOverScene);
 private:
-	void GoToGameScene(Ref *sender);
+	void GoToGameScene();
 	void OnKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
 };
 

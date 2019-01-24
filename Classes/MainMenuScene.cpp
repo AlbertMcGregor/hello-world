@@ -21,47 +21,47 @@ bool MainMenuScene::init()
 
 	visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto Background = Sprite::create("Background.png");
+	auto Background = Sprite::create("images/Background.png");
 	Background->setAnchorPoint(Vec2(0, 1));
 	Background->setPosition(Vec2(0, Director::getInstance()->getVisibleSize().height));
 	
-	base = Sprite::create("baseLong2.png");
-	base->setAnchorPoint(Vec2(0, 1));
-	base->setPosition(0, visibleSize.height - Background->getContentSize().height);
+	Base = Sprite::create("images/baseLong2.png");
+	Base->setAnchorPoint(Vec2(0, 1));
+	Base->setPosition(0, visibleSize.height - Background->getContentSize().height);
 
 	this->addChild(Background, -1);
-	this->addChild(base, 1);
+	this->addChild(Base, 1);
 
 	moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * visibleSize.width, Vec2(-visibleSize.width -
-		Sprite::create("TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+		Sprite::create("images/TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
 
-	base->runAction(moveBy);
+	Base->runAction(moveBy);
 
 
-	auto playItem = MenuItemImage::create("start-button.png", "start-button.png", CC_CALLBACK_1(MainMenuScene::GoToGameScene, this));
+	auto playItem = MenuItemImage::create("images/start-button.png", "images/start-button.png", CC_CALLBACK_0(MainMenuScene::goToGameScene, this));
 	playItem->setScale(1.5);
 	auto menu = Menu::createWithItem(playItem);
 	menu->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2,
 		                       Director::getInstance()->getVisibleSize().height / 2.8));
 	this->addChild(menu);
 	
-	auto menuLabel = Label::createWithTTF("HappyBird", "flappy-bird.ttf", 200);
+	auto menuLabel = Label::createWithTTF("HappyBird", "fonts/flappy-bird.ttf", 200);
 	menuLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.85));
 	menuLabel->setTextColor(cocos2d::Color4B::WHITE);
 	menuLabel->enableOutline(cocos2d::Color4B(0, 0, 0, 200));
 	menuLabel->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -8));
 	this->addChild(menuLabel);
 
-	auto autorLabel = Label::createWithTTF("Powered by Albert Protopopov", "flappy-bird.ttf", 50);
+	auto autorLabel = Label::createWithTTF("Powered by Albert Protopopov", "fonts/flappy-bird.ttf", 50);
 	autorLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.12));
 	autorLabel->setTextColor(cocos2d::Color4B::WHITE);
 	autorLabel->enableShadow(cocos2d::Color4B(0, 0, 0, 200), Size(2, -2));
 	this->addChild(autorLabel, 5);
 
-	bird = Sprite::create("yellowbird-midflap.png");
-	bird->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-	BirdAnimate();
-	this->addChild(bird);
+	Bird = Sprite::create("images/bluebird-midflap.png");
+	Bird->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+	birdAnimate();
+	this->addChild(Bird);
 
 
 	auto vector = cocos2d::Vector<FiniteTimeAction*>();
@@ -70,10 +70,10 @@ bool MainMenuScene::init()
 
 	auto sequence = cocos2d::Sequence::create(vector);
 
-	bird->runAction(RepeatForever::create(sequence));
+	Bird->runAction(RepeatForever::create(sequence));
 
 	auto keyboardListener = EventListenerKeyboard::create();
-	keyboardListener->onKeyPressed = CC_CALLBACK_2(MainMenuScene::OnKeyPressed, this);
+	keyboardListener->onKeyPressed = CC_CALLBACK_2(MainMenuScene::onKeyPressed, this);
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyboardListener, this);
 
 	this->scheduleUpdate();
@@ -84,48 +84,47 @@ bool MainMenuScene::init()
 void MainMenuScene::update(float dt)
 {
 	
-	Vec2 position = base->getPosition();
-	if (position.x < (-(visibleSize.width) - Sprite::create("TopPipe.png")->getContentSize().width *
+	Vec2 position = Base->getPosition();
+	if (position.x < (-(visibleSize.width) - Sprite::create("images/TopPipe.png")->getContentSize().width *
 		settings.jsonsettings["PIPE_SCALE"].GetFloat() + 10))
 	{
 		position.x = 0;
-		base->setPosition(position);
+		Base->setPosition(position);
 
 		auto moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * (visibleSize.width), Vec2(-visibleSize.width -
-			Sprite::create("TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+			Sprite::create("images/TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
 
-		base->runAction(moveBy);
+		Base->runAction(moveBy);
 	}
 
 }
 
-void MainMenuScene::GoToGameScene(Ref *sender)
+void MainMenuScene::goToGameScene()
 {
 	auto scene = GameScene::createScene();
 	Director::getInstance()->replaceScene(scene);
 }
 
-void MainMenuScene::BirdAnimate()
+void MainMenuScene::birdAnimate()
 {
 	Vector <SpriteFrame *> frames;
 	frames.reserve(3);
-	frames.pushBack(SpriteFrame::create("yellowbird-upflap.png", Rect(0, 0, 34, 24)));
-	frames.pushBack(SpriteFrame::create("yellowbird-downflap.png", Rect(0, 0, 34, 24)));
-	frames.pushBack(SpriteFrame::create("yellowbird-midflap.png", Rect(0, 0, 34, 24)));
+	frames.pushBack(SpriteFrame::create("images/bluebird-upflap.png", Rect(0, 0, 34, 24)));
+	frames.pushBack(SpriteFrame::create("images/bluebird-downflap.png", Rect(0, 0, 34, 24)));
+	frames.pushBack(SpriteFrame::create("images/bluebird-midflap.png", Rect(0, 0, 34, 24)));
 
 	auto animation = Animation::createWithSpriteFrames(frames, 0.1f);
 	auto animate = Animate::create(animation);
 
-	bird->runAction(RepeatForever::create(animate));
+	Bird->runAction(RepeatForever::create(animate));
 }
 
-void MainMenuScene::OnKeyPressed(EventKeyboard::KeyCode keyCode, Event *event)
+void MainMenuScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event *event)
 {
 	switch (keyCode)
 		case EventKeyboard::KeyCode::KEY_ENTER:
 	{
-		auto scene = GameScene::createScene();
-		Director::getInstance()->replaceScene(scene);
+		MainMenuScene::goToGameScene();
 	}
 }
 

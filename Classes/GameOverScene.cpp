@@ -47,40 +47,40 @@ bool GameOverScene::init()
 
 	def->flush();
 
-	auto menuItem = MenuItemImage::create("start-button.png", "start-button.png", CC_CALLBACK_1(GameOverScene::GoToGameScene, this));
+	auto menuItem = MenuItemImage::create("images/start-button.png", "images/start-button.png", CC_CALLBACK_0(GameOverScene::GoToGameScene, this));
 	auto menuRetry = Menu::createWithItem(menuItem);
 	menuRetry->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 4));
 
 	this->addChild(menuRetry);
 
-	auto startButtonText = Label::createWithTTF("RETRY", "flappy-bird.ttf", visibleSize.height * 0.1);
+	auto startButtonText = Label::createWithTTF("RETRY", "fonts/flappy-bird.ttf", visibleSize.height * 0.1);
 	startButtonText->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.35));
 
 	this->addChild(startButtonText);
 	
 	__String *tempScore = __String::createWithFormat("%i", score);
-	auto scoreLabel = Label::createWithTTF(tempScore->getCString(), "flappy-bird.ttf", visibleSize.height * 0.15);
+	auto scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/flappy-bird.ttf", visibleSize.height * 0.15);
 	scoreLabel->setPosition(Vec2(visibleSize.width / 3, visibleSize.height * 0.5));
 
 	this->addChild(scoreLabel);
 
 	__String *tempHighScore = __String::createWithFormat("%i", highScore);
-	auto highScoreLabel = Label::createWithTTF(tempHighScore->getCString(), "flappy-bird.ttf", visibleSize.height * 0.15);
+	auto highScoreLabel = Label::createWithTTF(tempHighScore->getCString(), "fonts/flappy-bird.ttf", visibleSize.height * 0.15);
 	highScoreLabel->setPosition(Vec2(visibleSize.width / 3 * 2, visibleSize.height * 0.5));
 
 	this->addChild(highScoreLabel);
 
-	auto scoreText = Label::createWithTTF("\nSCORE", "flappy-bird.ttf", visibleSize.height * 0.12);
+	auto scoreText = Label::createWithTTF("\nSCORE", "fonts/flappy-bird.ttf", visibleSize.height * 0.12);
 	scoreText->setPosition(Vec2(visibleSize.width / 3, visibleSize.height * 0.7));
 
 	this->addChild(scoreText);
 
-	auto highScoreText = Label::createWithTTF(" HIGH\nSCORE", "flappy-bird.ttf", visibleSize.height * 0.12);
+	auto highScoreText = Label::createWithTTF(" HIGH\nSCORE", "fonts/flappy-bird.ttf", visibleSize.height * 0.12);
 	highScoreText->setPosition(Vec2(visibleSize.width / 3 * 2, visibleSize.height * 0.7));
 
 	this->addChild(highScoreText);
 
-	auto gameOverText = Label::createWithTTF("GAME OVER", "flappy-bird.ttf", visibleSize.height * 0.15);
+	auto gameOverText = Label::createWithTTF("GAME OVER", "fonts/flappy-bird.ttf", visibleSize.height * 0.15);
 	gameOverText->setPosition(Vec2(visibleSize.width / 2, visibleSize.height * 0.9));
 	this->addChild(gameOverText);
 
@@ -91,7 +91,7 @@ bool GameOverScene::init()
 	return true;
 }
 
-void GameOverScene::GoToGameScene(Ref *sender)
+void GameOverScene::GoToGameScene()
 {
 	auto scene = GameScene::createScene();
 	Director::getInstance()->replaceScene(scene);

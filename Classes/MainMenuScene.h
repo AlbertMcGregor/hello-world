@@ -13,27 +13,27 @@ public:
     virtual bool init() override;
 
 	void update(float) override;
+
+	Settings settings;
 		
     CREATE_FUNC(MainMenuScene);
 
 private:
-	cocos2d::Sprite *base;
+	cocos2d::Sprite *Base;
 
 	cocos2d::MoveBy *moveBy;
 
 	cocos2d::Size visibleSize;
 
-	cocos2d::Sprite *bird;
+	cocos2d::Sprite *Bird;
 
-	void GoToGameScene(Ref *sender);
+	void goToGameScene();
 
-	void OnKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
+	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event);
 
-	void BirdAnimate();
+	void birdAnimate();
 
 	float topPipeWidth;
-
-	Settings settings;
 };
 
 #endif // __MAIN_MENU_SCENE_H__

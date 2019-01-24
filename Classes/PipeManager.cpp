@@ -8,28 +8,28 @@ PipeManager::PipeManager()
 	origin = Director::getInstance()->getVisibleOrigin();
 }
 
-void PipeManager::SpawnPipe(cocos2d::Layer *layer)
+void PipeManager::spawnPipe(cocos2d::Layer *layer)
 {
-	auto topPipe = Sprite::create("TopPipe.png");
-	auto bottomPipe = Sprite::create("BottomPipe.png");
-	topPipe->setScaleY(settings.jsonsettings["PIPE_SCALE"].GetFloat());
-	bottomPipe->setScaleY(settings.jsonsettings["PIPE_SCALE"].GetFloat());
+	auto TopPipe = Sprite::create("images/TopPipe.png");
+	auto BottomPipe = Sprite::create("images/BottomPipe.png");
+	TopPipe->setScaleY(settings.jsonsettings["PIPE_SCALE"].GetFloat());
+	BottomPipe->setScaleY(settings.jsonsettings["PIPE_SCALE"].GetFloat());
 
-	auto topPipeBody = PhysicsBody::createBox(topPipe->getContentSize());
-	auto bottomPipeBody = PhysicsBody::createBox(bottomPipe->getContentSize());
+	auto TopPipeBody = PhysicsBody::createBox(TopPipe->getContentSize());
+	auto BottomPipeBody = PhysicsBody::createBox(BottomPipe->getContentSize());
 
-	topPipeBody->setDynamic(false);
-	bottomPipeBody->setDynamic(false);
+	TopPipeBody->setDynamic(false);
+	BottomPipeBody->setDynamic(false);
 
-	topPipeBody->setCollisionBitmask(0x000002);
-	bottomPipeBody->setCollisionBitmask(0x000002);
-	topPipeBody->setContactTestBitmask(true);
-	bottomPipeBody->setContactTestBitmask(true);
+	TopPipeBody->setCollisionBitmask(0x000002);
+	BottomPipeBody->setCollisionBitmask(0x000002);
+	TopPipeBody->setContactTestBitmask(true);
+	BottomPipeBody->setContactTestBitmask(true);
 
-	topPipe->setPhysicsBody(topPipeBody);
-	bottomPipe->setPhysicsBody(bottomPipeBody);
+	TopPipe->setPhysicsBody(TopPipeBody);
+	BottomPipe->setPhysicsBody(BottomPipeBody);
 
-	auto backSize = Sprite::create("background-day.png")->getContentSize();
+	auto backSize = Sprite::create("images/Background.png")->getContentSize();
 
 	auto random = CCRANDOM_0_1();
 
@@ -43,43 +43,43 @@ void PipeManager::SpawnPipe(cocos2d::Layer *layer)
 	}
 
 	auto topPipePosition = (random * backSize.height + (visibleSize.height - backSize.height) +
-		                                                 topPipe->getContentSize().height / 2 * 
+		                                                 TopPipe->getContentSize().height / 2 * 
 														 settings.jsonsettings["PIPE_SCALE"].GetFloat() + 
 														 settings.jsonsettings["PIPE_GAP"].GetFloat() / 2);
 
-	topPipe->setPosition(Point(visibleSize.width + topPipe->getContentSize().width / 2 * settings.jsonsettings["PIPE_SCALE"].GetFloat(),
+	TopPipe->setPosition(Point(visibleSize.width + TopPipe->getContentSize().width / 2 * settings.jsonsettings["PIPE_SCALE"].GetFloat(),
 		topPipePosition));
 
-	bottomPipe->setPosition(Point(topPipe->getPositionX(), topPipePosition - settings.jsonsettings["PIPE_GAP"].GetFloat() / 2 - 
-		bottomPipe->getContentSize().height * settings.jsonsettings["PIPE_SCALE"].GetFloat()));
+	BottomPipe->setPosition(Point(TopPipe->getPositionX(), topPipePosition - settings.jsonsettings["PIPE_GAP"].GetFloat() / 2 - 
+		BottomPipe->getContentSize().height * settings.jsonsettings["PIPE_SCALE"].GetFloat()));
 
-	layer->addChild(topPipe);
+	layer->addChild(TopPipe);
 
-	layer->addChild(bottomPipe);
+	layer->addChild(BottomPipe);
 
 	auto topPipeAction = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * visibleSize.width, Point(-visibleSize.width -
-		topPipe->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+		TopPipe->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
 	
 
-	topPipe->runAction(topPipeAction);
-	bottomPipe->runAction(topPipeAction->clone());
+	TopPipe->runAction(topPipeAction);
+	BottomPipe->runAction(topPipeAction->clone());
 
-	auto pointNode = Node::create();
+	auto PointNode = Node::create();
 
-	auto pointBody = PhysicsBody::createBox(Size(1, settings.jsonsettings["PIPE_GAP"].GetFloat()));
-	pointBody->setDynamic(false);
-	pointBody->setCollisionBitmask(settings.jsonsettings["POINT_COLLISION_BITMASK"].GetFloat());
-	pointBody->setContactTestBitmask(true);
+	auto PointBody = PhysicsBody::createBox(Size(1, settings.jsonsettings["PIPE_GAP"].GetFloat()));
+	PointBody->setDynamic(false);
+	PointBody->setCollisionBitmask(settings.jsonsettings["POINT_COLLISION_BITMASK"].GetFloat());
+	PointBody->setContactTestBitmask(true);
 
-	pointNode->setPhysicsBody(pointBody);
-	pointNode->setPosition(Vec2(topPipe->getPositionX(), topPipe->getPositionY() - topPipe->getContentSize().height / 2 -
+	PointNode->setPhysicsBody(PointBody);
+	PointNode->setPosition(Vec2(TopPipe->getPositionX(), TopPipe->getPositionY() - TopPipe->getContentSize().height / 2 -
 		settings.jsonsettings["PIPE_GAP"].GetFloat() / 2));
 
-	layer->addChild(pointNode);
+	layer->addChild(PointNode);
 
 	auto pointAction = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * visibleSize.width, Point(-visibleSize.width -
-		topPipe->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
-	pointNode->runAction(pointAction);
+		TopPipe->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+	PointNode->runAction(pointAction);
 }
 
 
