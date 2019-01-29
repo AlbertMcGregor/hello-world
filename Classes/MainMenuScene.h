@@ -13,8 +13,6 @@ public:
     virtual bool init() override;
 
 	void update(float) override;
-
-	Settings settings;
 		
     CREATE_FUNC(MainMenuScene);
 
@@ -34,6 +32,9 @@ private:
 	void birdAnimate();
 
 	float topPipeWidth;
+
+	Settings constants;
+
 };
 
 #endif // __MAIN_MENU_SCENE_H__

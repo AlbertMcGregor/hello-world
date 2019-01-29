@@ -17,7 +17,7 @@ private:
 	cocos2d::Sprite* TopPipe;
 	cocos2d::Sprite* BottomPipe;
 
-	Settings settings;
+	Settings constants;
 
 };
 

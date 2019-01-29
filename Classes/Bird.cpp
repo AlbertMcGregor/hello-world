@@ -12,7 +12,7 @@ Bird::Bird(cocos2d::Layer *layer)
 	HappyBird->setPosition(Point(visibleSize.width / 3 , visibleSize.height / 2 + origin.y));
 
 	HappyBody = PhysicsBody::createCircle(HappyBird->getContentSize().height / 2);
-	HappyBody->setCollisionBitmask(settings.jsonsettings["BIRD_COLLISION_BITMASK"].GetFloat());
+	HappyBody->setCollisionBitmask(constants.BIRD_COLLISION_BITMASK);
 	HappyBody->setContactTestBitmask(true);
 
 	HappyBird->setPhysicsBody(HappyBody);
@@ -29,12 +29,12 @@ void Bird::fall()
 	if (true == IsFalling)
 	{
 		HappyBird->setPositionX(visibleSize.width / 3 + origin.x);
-		HappyBird->setPositionY(HappyBird->getPositionY() - (settings.jsonsettings["BIRD_FALLING_SPEED"].GetFloat() * visibleSize.height));
+		HappyBird->setPositionY(HappyBird->getPositionY() - (constants.BIRD_FALLING_SPEED * visibleSize.height));
 	}
 	else
 	{
 		HappyBird->setPositionX(visibleSize.width / 3 + origin.x);
-		HappyBird->setPositionY(HappyBird->getPositionY() + (settings.jsonsettings["BIRD_FLYING_SPEED"].GetFloat() * visibleSize.height));
+		HappyBird->setPositionY(HappyBird->getPositionY() + (constants.BIRD_FLYING_SPEED * visibleSize.height));
 	}
 }
 

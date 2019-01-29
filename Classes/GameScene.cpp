@@ -1,7 +1,6 @@
 #include "GameScene.h"
 #include "GameOverScene.h"
 #include "SimpleAudioEngine.h"
-#include "Settings.h"
 #include "Bird.h"
 
 USING_NS_CC;
@@ -49,8 +48,8 @@ bool GameScene::init()
 	Base->setAnchorPoint(Vec2(0, 1));
 	Base->setPosition(0, visibleSize.height - Background->getContentSize().height);
 
-	auto moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * visibleSize.width, Vec2(-visibleSize.width -
-		Sprite::create("images/TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+	auto moveBy = MoveBy::create(constants.PIPE_MOVEMENT_SPEED * visibleSize.width, Vec2(-visibleSize.width -
+		Sprite::create("images/TopPipe.png")->getContentSize().width * constants.PIPE_SCALE, 0));
 
 	Base->runAction(moveBy);
 
@@ -95,7 +94,7 @@ bool GameScene::init()
 	Size sizeBase(visibleSize.width, visibleSize.height - Background->getContentSize().height);
 
 	auto edgeBodyBase = PhysicsBody::createEdgeBox(sizeBase);
-	edgeBodyBase->setCollisionBitmask(settings.jsonsettings["OBSTACLE_COLLISION_BITMASK"].GetFloat());
+	edgeBodyBase->setCollisionBitmask(constants.OBSTACLE_COLLISION_BITMASK);
 	edgeBodyBase->setContactTestBitmask(true);
 
 	auto edgeNodeBase = Node::create();
@@ -106,7 +105,7 @@ bool GameScene::init()
 	this->addChild(edgeNode);
 	this->addChild(edgeNodeBase);
 
-	this->schedule(schedule_selector(GameScene::spawnPipe), settings.jsonsettings["PIPE_SPAWN_FREQUENCY"].GetFloat() * visibleSize.width);
+	this->schedule(schedule_selector(GameScene::spawnPipe), constants.PIPE_SPAWN_FREQUENCY * visibleSize.width);
 
 	bird = new Bird(this);
 
@@ -169,7 +168,7 @@ bool GameScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 
 	flapEffect();
 
-	this->scheduleOnce(schedule_selector(GameScene::stopFlying), settings.jsonsettings["BIRD_FLY_DURATION"].GetFloat());
+	this->scheduleOnce(schedule_selector(GameScene::stopFlying), constants.BIRD_FLY_DURATION);
 
 	bird->birdAnimate();
 
@@ -195,7 +194,7 @@ void GameScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode,cocos2d::Ev
 
 		flapEffect();
 
-		this->scheduleOnce(schedule_selector(GameScene::stopFlying), settings.jsonsettings["BIRD_FLY_DURATION"].GetFloat());
+		this->scheduleOnce(schedule_selector(GameScene::stopFlying), constants.BIRD_FLY_DURATION);
 
 		bird->birdAnimate();
 	  }
@@ -209,10 +208,10 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
 	PhysicsBody *a = contact.getShapeA()->getBody();
 	PhysicsBody *b = contact.getShapeB()->getBody();
 
-	if (settings.jsonsettings["BIRD_COLLISION_BITMASK"] == a->getCollisionBitmask() && 
-		settings.jsonsettings["OBSTACLE_COLLISION_BITMASK"] == b->getCollisionBitmask() ||
-		settings.jsonsettings["BIRD_COLLISION_BITMASK"] == b->getCollisionBitmask() && 
-		settings.jsonsettings["OBSTACLE_COLLISION_BITMASK"] == a->getCollisionBitmask())
+	if (constants.BIRD_COLLISION_BITMASK == a->getCollisionBitmask() && 
+		constants.OBSTACLE_COLLISION_BITMASK == b->getCollisionBitmask() ||
+		constants.BIRD_COLLISION_BITMASK == b->getCollisionBitmask() && 
+		constants.OBSTACLE_COLLISION_BITMASK == a->getCollisionBitmask())
 	{
 
 		hitEffect();
@@ -222,10 +221,10 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
 		Director::getInstance()->replaceScene(scene);
 	}
 
-	if (settings.jsonsettings["BIRD_COLLISION_BITMASK"] == a->getCollisionBitmask() && 
-		settings.jsonsettings["POINT_COLLISION_BITMASK"] == b->getCollisionBitmask() ||
-		settings.jsonsettings["BIRD_COLLISION_BITMASK"] == b->getCollisionBitmask() && 
-		settings.jsonsettings["POINT_COLLISION_BITMASK"] == a->getCollisionBitmask())
+	if (constants.BIRD_COLLISION_BITMASK == a->getCollisionBitmask() && 
+		constants.POINT_COLLISION_BITMASK == b->getCollisionBitmask() ||
+		constants.BIRD_COLLISION_BITMASK == b->getCollisionBitmask() && 
+		constants.POINT_COLLISION_BITMASK == a->getCollisionBitmask())
 	{
 		
 		pointEffect();
@@ -280,13 +279,13 @@ void GameScene::baseMovingController()
 {
 	Vec2 position = Base->getPosition();
 	if (position.x < (-(visibleSize.width) - Sprite::create("images/TopPipe.png")->getContentSize().width * 
-		settings.jsonsettings["PIPE_SCALE"].GetFloat() + 10))
+		constants.PIPE_SCALE + 10))
 	{
 		position.x = 0;
 		Base->setPosition(position);
 
-		auto moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * (visibleSize.width), Vec2(-visibleSize.width -
-			Sprite::create("images/TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+		auto moveBy = MoveBy::create(constants.PIPE_MOVEMENT_SPEED * (visibleSize.width), Vec2(-visibleSize.width -
+			Sprite::create("images/TopPipe.png")->getContentSize().width * constants.PIPE_SCALE, 0));
 
 		Base->runAction(moveBy);
 	}

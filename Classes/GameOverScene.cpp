@@ -1,6 +1,5 @@
 #include "GameOverScene.h"
 #include "GameScene.h"
-#include "Settings.h"
 
 USING_NS_CC;
 
@@ -26,14 +25,12 @@ bool GameOverScene::init()
         return false;
     }
 
-	Settings settings;
-
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
 	UserDefault *def = UserDefault::getInstance();
 	auto highScore = def->getIntegerForKey("HIGHSCORE", 0);
 
-	// Вариант с хранением highscore пока не работает корректно: не удалётся перезаписать "HIGHSCORE" в json файле
+	// Вариант с хранением highscore пока не работает корректно: не удаётся перезаписать "HIGHSCORE" в json файле
 	//int highScore = settings.jsonsettings["HIGHSCORE"].GetInt();
 	
 	if (score > highScore)

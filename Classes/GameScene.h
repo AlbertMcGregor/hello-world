@@ -48,7 +48,7 @@ private:
 
 	Bird *bird;
 
-	Settings settings;
+	Settings constants;
 	
 	cocos2d::PhysicsWorld *sceneWorld;
 

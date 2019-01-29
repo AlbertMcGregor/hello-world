@@ -17,6 +17,7 @@ public:
 	void checkPosition();
 
 private:
+
 	cocos2d::Size visibleSize;
 	cocos2d::Vec2 origin;
 
@@ -26,7 +27,7 @@ private:
 
 	bool IsFalling;
 
-	Settings settings;
+	Settings constants;
 };
 
 #endif // __BIRD_H__

@@ -12,8 +12,8 @@ void PipeManager::spawnPipe(cocos2d::Layer *layer)
 {
 	auto TopPipe = Sprite::create("images/TopPipe.png");
 	auto BottomPipe = Sprite::create("images/BottomPipe.png");
-	TopPipe->setScaleY(settings.jsonsettings["PIPE_SCALE"].GetFloat());
-	BottomPipe->setScaleY(settings.jsonsettings["PIPE_SCALE"].GetFloat());
+	TopPipe->setScaleY(constants.PIPE_SCALE);
+	BottomPipe->setScaleY(constants.PIPE_SCALE);
 
 	auto TopPipeBody = PhysicsBody::createBox(TopPipe->getContentSize());
 	auto BottomPipeBody = PhysicsBody::createBox(BottomPipe->getContentSize());
@@ -33,32 +33,32 @@ void PipeManager::spawnPipe(cocos2d::Layer *layer)
 
 	auto random = CCRANDOM_0_1();
 
-    if (random > settings.jsonsettings["UPPER_PIPE_SCREEN_THRESHOLD"].GetFloat())
+    if (random > constants.UPPER_PIPE_SCREEN_THRESHOLD)
 	{
-		random = settings.jsonsettings["UPPER_PIPE_SCREEN_THRESHOLD"].GetFloat();
+		random = constants.UPPER_PIPE_SCREEN_THRESHOLD;
 	}
-	if (random < settings.jsonsettings["LOWER_PIPE_SCREEN_THRESHOLD"].GetFloat())
+	if (random < constants.LOWER_PIPE_SCREEN_THRESHOLD)
 	{
-		random = settings.jsonsettings["LOWER_PIPE_SCREEN_THRESHOLD"].GetFloat();
+		random = constants.LOWER_PIPE_SCREEN_THRESHOLD;
 	}
 
 	auto topPipePosition = (random * backSize.height + (visibleSize.height - backSize.height) +
 		                                                 TopPipe->getContentSize().height / 2 * 
-														 settings.jsonsettings["PIPE_SCALE"].GetFloat() + 
-														 settings.jsonsettings["PIPE_GAP"].GetFloat() / 2);
+														 constants.PIPE_SCALE + 
+														 constants.PIPE_GAP / 2);
 
-	TopPipe->setPosition(Point(visibleSize.width + TopPipe->getContentSize().width / 2 * settings.jsonsettings["PIPE_SCALE"].GetFloat(),
+	TopPipe->setPosition(Point(visibleSize.width + TopPipe->getContentSize().width / 2 * constants.PIPE_SCALE,
 		topPipePosition));
 
-	BottomPipe->setPosition(Point(TopPipe->getPositionX(), topPipePosition - settings.jsonsettings["PIPE_GAP"].GetFloat() / 2 - 
-		BottomPipe->getContentSize().height * settings.jsonsettings["PIPE_SCALE"].GetFloat()));
+	BottomPipe->setPosition(Point(TopPipe->getPositionX(), topPipePosition - constants.PIPE_GAP / 2 - 
+		BottomPipe->getContentSize().height * constants.PIPE_SCALE));
 
 	layer->addChild(TopPipe);
 
 	layer->addChild(BottomPipe);
 
-	auto topPipeAction = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * visibleSize.width, Point(-visibleSize.width -
-		TopPipe->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+	auto topPipeAction = MoveBy::create(constants.PIPE_MOVEMENT_SPEED * visibleSize.width, Point(-visibleSize.width -
+		TopPipe->getContentSize().width * constants.PIPE_SCALE, 0));
 	
 
 	TopPipe->runAction(topPipeAction);
@@ -66,19 +66,19 @@ void PipeManager::spawnPipe(cocos2d::Layer *layer)
 
 	auto PointNode = Node::create();
 
-	auto PointBody = PhysicsBody::createBox(Size(1, settings.jsonsettings["PIPE_GAP"].GetFloat()));
+	auto PointBody = PhysicsBody::createBox(Size(1, constants.PIPE_GAP));
 	PointBody->setDynamic(false);
-	PointBody->setCollisionBitmask(settings.jsonsettings["POINT_COLLISION_BITMASK"].GetFloat());
+	PointBody->setCollisionBitmask(constants.POINT_COLLISION_BITMASK);
 	PointBody->setContactTestBitmask(true);
 
 	PointNode->setPhysicsBody(PointBody);
 	PointNode->setPosition(Vec2(TopPipe->getPositionX(), TopPipe->getPositionY() - TopPipe->getContentSize().height / 2 -
-		settings.jsonsettings["PIPE_GAP"].GetFloat() / 2));
+		constants.PIPE_GAP / 2));
 
 	layer->addChild(PointNode);
 
-	auto pointAction = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * visibleSize.width, Point(-visibleSize.width -
-		TopPipe->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+	auto pointAction = MoveBy::create(constants.PIPE_MOVEMENT_SPEED * visibleSize.width, Point(-visibleSize.width -
+		TopPipe->getContentSize().width * constants.PIPE_SCALE, 0));
 	PointNode->runAction(pointAction);
 }
 

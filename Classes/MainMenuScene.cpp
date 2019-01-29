@@ -21,6 +21,8 @@ bool MainMenuScene::init()
 
 	visibleSize = Director::getInstance()->getVisibleSize();
 
+	constants.setConstants();
+
 	auto Background = Sprite::create("images/Background.png");
 	Background->setAnchorPoint(Vec2(0, 1));
 	Background->setPosition(Vec2(0, Director::getInstance()->getVisibleSize().height));
@@ -32,8 +34,8 @@ bool MainMenuScene::init()
 	this->addChild(Background, -1);
 	this->addChild(Base, 1);
 
-	moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * visibleSize.width, Vec2(-visibleSize.width -
-		Sprite::create("images/TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+	moveBy = MoveBy::create(constants.PIPE_MOVEMENT_SPEED * visibleSize.width, Vec2(-visibleSize.width -
+		Sprite::create("images/TopPipe.png")->getContentSize().width * constants.PIPE_SCALE, 0));
 
 	Base->runAction(moveBy);
 
@@ -86,13 +88,13 @@ void MainMenuScene::update(float dt)
 	
 	Vec2 position = Base->getPosition();
 	if (position.x < (-(visibleSize.width) - Sprite::create("images/TopPipe.png")->getContentSize().width *
-		settings.jsonsettings["PIPE_SCALE"].GetFloat() + 10))
+		constants.PIPE_SCALE + 10))
 	{
 		position.x = 0;
 		Base->setPosition(position);
 
-		auto moveBy = MoveBy::create(settings.jsonsettings["PIPE_MOVEMENT_SPEED"].GetFloat() * (visibleSize.width), Vec2(-visibleSize.width -
-			Sprite::create("images/TopPipe.png")->getContentSize().width * settings.jsonsettings["PIPE_SCALE"].GetFloat(), 0));
+		auto moveBy = MoveBy::create(constants.PIPE_MOVEMENT_SPEED * (visibleSize.width), Vec2(-visibleSize.width -
+			Sprite::create("images/TopPipe.png")->getContentSize().width * constants.PIPE_SCALE, 0));
 
 		Base->runAction(moveBy);
 	}
@@ -122,7 +124,8 @@ void MainMenuScene::birdAnimate()
 void MainMenuScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event *event)
 {
 	switch (keyCode)
-		case EventKeyboard::KeyCode::KEY_ENTER:
+
+	case EventKeyboard::KeyCode::KEY_ENTER:
 	{
 		MainMenuScene::goToGameScene();
 	}
