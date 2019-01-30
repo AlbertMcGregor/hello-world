@@ -2,6 +2,7 @@
 #include "GameOverScene.h"
 #include "SimpleAudioEngine.h"
 #include "Bird.h"
+#include "SoundManager.h"
 
 USING_NS_CC;
 
@@ -26,13 +27,9 @@ bool GameScene::init()
 
 	Director::getInstance()->pause();
 
+	soundManager.preloadAll();
 
-	///////////////////////////////////    AUDIO EFFECTS    //////////////////////////////////////////////////
-
-
-	auto effect = CocosDenshion::SimpleAudioEngine::getInstance();
-	effect->preloadEffect("audio/sfx_swooshing.wav");
-	effect->playEffect("audio/sfx_swooshing.wav");
+	soundManager.playBeginEffect();
 
 
 	//////////////////////////////////    BACKGROUND & BASE    /////////////////////////////////////////////
@@ -166,7 +163,7 @@ bool GameScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 
 	bird->fly();
 
-	flapEffect();
+	soundManager.playFlapEffect();
 
 	this->scheduleOnce(schedule_selector(GameScene::stopFlying), constants.BIRD_FLY_DURATION);
 
@@ -192,7 +189,7 @@ void GameScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode,cocos2d::Ev
 
 		bird->fly();
 
-		flapEffect();
+		soundManager.playFlapEffect();
 
 		this->scheduleOnce(schedule_selector(GameScene::stopFlying), constants.BIRD_FLY_DURATION);
 
@@ -214,8 +211,8 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
 		constants.OBSTACLE_COLLISION_BITMASK == a->getCollisionBitmask())
 	{
 
-		hitEffect();
-		
+		soundManager.playHitEffect();
+
 		auto scene = GameOverScene::createScene(score);
 
 		Director::getInstance()->replaceScene(scene);
@@ -227,8 +224,8 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
 		constants.POINT_COLLISION_BITMASK == a->getCollisionBitmask())
 	{
 		
-		pointEffect();
-	    
+		soundManager.playPointEffect();
+
 		score++;
 
         
@@ -252,27 +249,6 @@ void GameScene::update(float dt)
 	bird->birdRotate();
 	bird->checkPosition();
 	baseMovingController();
-}
-
-void GameScene::flapEffect()
-{
-	auto effect = CocosDenshion::SimpleAudioEngine::getInstance();
-	effect->preloadEffect("audio/sfx_wing.wav");
-	effect->playEffect("audio/sfx_wing.wav");
-}
-
-void GameScene::pointEffect()
-{
-	auto effect = CocosDenshion::SimpleAudioEngine::getInstance();
-	effect->preloadEffect("audio/sfx_point.wav");
-	effect->playEffect("audio/sfx_point.wav");
-}
-
-void GameScene::hitEffect()
-{
-	auto effect = CocosDenshion::SimpleAudioEngine::getInstance();
-	effect->preloadEffect("audio/sfx_hit.wav");
-	effect->playEffect("audio/sfx_hit.wav");
 }
 
 void GameScene::baseMovingController()

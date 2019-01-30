@@ -5,6 +5,7 @@
 #include "PipeManager.h"
 #include "Bird.h"
 #include "Settings.h"
+#include "SoundManager.h"
 
 
 class GameScene : public cocos2d::Layer
@@ -31,13 +32,7 @@ private:
 	void update(float dt);
 
 	void baseMovingController();
-	
-	void flapEffect();
-
-	void pointEffect();
-
-	void hitEffect();
-	
+		
 	void spawnPipe(float dt);
 
 	bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
@@ -49,6 +44,8 @@ private:
 	Bird *bird;
 
 	Settings constants;
+
+	SoundManager soundManager;
 	
 	cocos2d::PhysicsWorld *sceneWorld;
 
