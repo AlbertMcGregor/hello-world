@@ -51,7 +51,7 @@ bool GameScene::init()
 	Base->runAction(moveBy);
 
 	this->addChild(Background, -1);
-	this->addChild(Base, 1);
+	this->addChild(Base, 2);
 
 
 	//////////////////////////////////////    INSTRUCTIONS    ////////////////////////////////////////////////
